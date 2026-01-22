@@ -4,6 +4,8 @@ import Navbar from './Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import MultiStepForm from './pages/MultiStepForm'
+import { ToastContainer } from 'react-toastify';
+import EditUser from './pages/EditUser'
 
 
 function App() {
@@ -12,11 +14,13 @@ function App() {
     
   <>
       <Navbar />
+      <ToastContainer />
       <div>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<MultiStepForm/>} />
+          <Route path='/edit' element={<EditUser />} />
         </Routes>
       </div>
     </>

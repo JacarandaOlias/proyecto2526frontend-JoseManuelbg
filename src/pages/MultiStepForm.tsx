@@ -5,10 +5,12 @@ import Step3 from "./Step3";
 
 export interface FormData {
   name: string;
+  surname: string;
   email: string;
   role: string;
   username: string;
   password: string;
+  passwordRe: string;
   subjects: number[];
 }
 
@@ -16,10 +18,12 @@ const MultiStepForm: React.FC = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     name: "",
+    surname: "",
     email: "",
     role: "STUDENT",
     username: "",
     password: "",
+    passwordRe: "",
     subjects: [],
   });
 

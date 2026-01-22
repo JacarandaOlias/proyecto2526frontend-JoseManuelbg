@@ -2,18 +2,20 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import type { AuthResponse } from "../models/AuthResponse";
+import { notify } from "../reusable/Notification";
 
 export default function Login() {
   const {login} = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState("");
     const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
+    if (email && password) {
+      
+    
 
     try {
       const res = await fetch("http://localhost:8080/signin", {
@@ -23,10 +25,11 @@ export default function Login() {
       });
 
       if (!res.ok) {
-        setError("User or password invalid");
+        notify("User or password invalid", "error");
         return;
       }
 
+      
 
       const data: AuthResponse = await res.json();
 
@@ -35,29 +38,33 @@ export default function Login() {
       navigate("/");
 
     } catch (err) {
-      setError("Error en el servidor");
+      notify("Error in the server", "error");
       console.error(err);
     }
+
+  }else{
+    notify("All fields are required", "error")
+  }
 
   }
 
 
 
   return (
-    <div className="bg-salviaGreen min-h-screen flex flex-col items-start justify-center">
+<div className="bg-salviaGreen min-h-screen flex items-center justify-center p-4">
 <form 
   onSubmit={handleSubmit} 
-  className="backdrop-blur-lg bg-brokenWhite/70 p-6 rounded-xl shadow-lg w-96 flex flex-col gap-4 ml-10"
+  className="backdrop-blur-lg bg-brokenWhite/70 p-6 rounded-xl shadow-lg w-full flex flex-col gap-4 max-h-md max-w-md mx-auto"
 >                
       <h1 className="text-3xl font-bold">Login</h1>
 
 <div className="mb-4">
                   <label className="block text-base/normal font-semibold text-gray-800 mb-2">Email address</label>
-                  <input value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded placeholder-gray-400 py-1.5 px-3 bg-transparent border-white/10 text-grey-800 focus:border-white/25 focus:outline-0 focus:ring-0" type="email" id="emailaddress" required placeholder="Enter your email" />
+                  <input value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded placeholder-gray-400 py-1.5 px-3 bg-transparent border-white/10 text-grey-800 focus:border-white/25 focus:outline-0 focus:ring-0" type="text" id="emailaddress"  placeholder="Enter your email" />
                 </div>
                 <div className="mb-4">
                   <label className="block text-base/normal font-semibold text-gray-800 mb-2">Password</label>
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full placeholder-gray-400 rounded py-1.5 px-3 bg-transparent border-white/10 text-grey-800 focus:border-white/25 focus:outline-0 focus:ring-0" type="password" required id="password" placeholder="Enter your password" />
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full placeholder-gray-400 rounded py-1.5 px-3 bg-transparent border-white/10 text-grey-800 focus:border-white/25 focus:outline-0 focus:ring-0" type="password"  id="password" placeholder="Enter your password" />
                 </div>
                 <div className="flex justify-between items-center gap-1 mb-6">
                   <div className="inline-flex items-center">
@@ -90,7 +97,6 @@ export default function Login() {
                   </div>
                 </div>
               </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
