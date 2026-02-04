@@ -9,6 +9,7 @@ export default function EditUserForm() {
   const [formData, setFormData] = useState({
     name: "",
     username: "",
+    password: "",
     email: "",
     role: "",
   });
@@ -39,6 +40,7 @@ if (!res.ok) {
           name: data.name,
           username: data.username,
           email: data.email,
+          password: "",
           role: data.role,
         });
 
@@ -78,12 +80,13 @@ if (!res.ok) {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
           },
           body: JSON.stringify({
             email: formData.email,
             name: formData.name,
             username: formData.username,
+            password: formData.password
           }),
         }
       );
@@ -91,6 +94,7 @@ if (!res.ok) {
       if (!res.ok) {
         const errData = await res.json().catch(() => null);
         notify(errData?.message || "Error updating user", "error");
+        console.log(res)
         setLoading(false);
         return;
       }
@@ -104,6 +108,7 @@ if (!res.ok) {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="bg-salviaGreen min-h-screen flex items-center justify-center p-4">
@@ -137,6 +142,19 @@ if (!res.ok) {
           />
         </div>
 
+        {/* Password */}
+        <div>
+          <label className="block text-base/normal font-semibold text-gray-800 mb-2">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="New password..."
+            className="block w-full rounded placeholder-gray-400 py-1.5 px-3 bg-transparent border-white/10 text-grey-800 focus:border-white/25 focus:outline-0 focus:ring-0"
+          />
+        </div>
+
         {/* Email (bloqueado) */}
         <div>
           <label className="block text-base/normal font-semibold text-gray-800 mb-2">Email</label>
@@ -162,13 +180,17 @@ if (!res.ok) {
         </div>
 
         {/* Botón enviar */}
+        <div className="w-full flex justify-between">
+        <button type="button" onClick={() => navigate("/")} className="w-1/2 bg-red-500 inline-flex items-center justify-center px-6 py-2 backdrop-blur-2x1 rounded-lg text-grey-800 transition-all duration-500 group hover:bg-red-700 hover:text-white mt-5">Go back</button>
         <button
           type="submit"
           disabled={loading}
-          className="w-full inline-flex items-center justify-center px-6 py-2 backdrop-blur-2xl bg-white/20 text-grey-800 rounded-lg transition-all duration-500 group hover:bg-blue-600/60 hover:text-white mt-5"
+          className="w-1/2 inline-flex items-center justify-center px-6 py-2 backdrop-blur-2xl bg-green-500 text-grey-800 rounded-lg transition-all duration-500 group hover:bg-green-700 hover:text-white mt-5"
         >
           {loading ? "Updating..." : "Save Changes"}
         </button>
+        
+        </div>
       </form>
     </div>
   );
