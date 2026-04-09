@@ -18,6 +18,7 @@ import AuditTable from './pages/Logs'
 import AdminValidation from './pages/AdminValidation'
 import BecomeMentorForm from './pages/BecomeMentorForm'
 import ManageAvailability from './pages/ManageAvailability'
+import { SpeedInsights } from '@vercel/speed-insights/react';
 function App() {
   return (
     <AuthProvider>
@@ -66,6 +67,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
+      <SpeedInsights />
     </AuthProvider>
   )
 }
